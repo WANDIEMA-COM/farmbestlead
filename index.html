@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Best Kenya - High Performance Animal Feed, Health & Proteins</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        },
+                        amberAccent: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #047857;
+        }
+    </style>
+</head>
+<body class="font-sans bg-slate-50 text-slate-800 antialiased overflow-x-hidden min-h-screen">
+
+    <!-- Custom Toast Notification System (Replaces alert) -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Exits Intent & Lead Recovery Modal -->
+    <div id="lead-exit-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4 hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative transform scale-95 transition-all duration-300">
+            <button onclick="toggleExitModal(false)" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-4">
+                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-3xl mx-auto animate-bounce">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-900">Wait! Get Your Free Farming Guide</h3>
+                <p class="text-sm text-slate-600">
+                    Enter your details below to get a **Free High-Yield Feed & Biosecurity PDF** sent to your WhatsApp, plus **10% OFF** your next animal feed purchase!
+                </p>
+                <form onsubmit="handleExitLeadSubmit(event)" class="space-y-3 pt-2 text-left">
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1">Your Full Name</label>
+                        <input type="text" id="exit-lead-name" required placeholder="e.g. Samuel Kamau" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1">WhatsApp Phone Number</label>
+                        <input type="tel" id="exit-lead-phone" required placeholder="e.g. 0799008282" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1">Your County / Location</label>
+                        <input type="text" id="exit-lead-location" required placeholder="e.g. Nakuru, Kiambu" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center space-x-2 mt-4">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Send Me My Guide & Discount</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Quiz / Feed Selector Modal -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4 hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+            <button onclick="toggleQuizModal(false)" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="quiz-step-1" class="space-y-4">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block">Step 1 of 3</span>
+                <h3 class="text-xl font-black text-slate-900">What is your primary livestock focus?</h3>
+                <div class="grid grid-cols-1 gap-3 pt-2">
+                    <button onclick="selectQuizFocus('Poultry / Broilers')" class="p-4 border border-slate-200 hover:border-emerald-500 rounded-2xl text-left font-bold text-slate-700 hover:bg-emerald-50/50 transition-all flex items-center justify-between">
+                        <span>Poultry / Broilers (Meat Production)</span>
+                        <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                    </button>
+                    <button onclick="selectQuizFocus('Poultry / Layers')" class="p-4 border border-slate-200 hover:border-emerald-500 rounded-2xl text-left font-bold text-slate-700 hover:bg-emerald-50/50 transition-all flex items-center justify-between">
+                        <span>Poultry / Layers (Egg Production)</span>
+                        <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                    </button>
+                    <button onclick="selectQuizFocus('Dairy Cattle')" class="p-4 border border-slate-200 hover:border-emerald-500 rounded-2xl text-left font-bold text-slate-700 hover:bg-emerald-50/50 transition-all flex items-center justify-between">
+                        <span>Dairy Cattle (Lactation Yield)</span>
+                        <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="quiz-step-2" class="space-y-4 hidden">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block">Step 2 of 3</span>
+                <h3 class="text-xl font-black text-slate-900">What is your current herd / flock size?</h3>
+                <div class="grid grid-cols-1 gap-3 pt-2">
+                    <button onclick="selectQuizSize('Small Farm (10 - 200 head)')" class="p-4 border border-slate-200 hover:border-emerald-500 rounded-2xl text-left font-bold text-slate-700 hover:bg-emerald-50/50 transition-all">
+                        <span>Small Scale Farm (10 - 200 head)</span>
+                    </button>
+                    <button onclick="selectQuizSize('Medium Farm (200 - 1000 head)')" class="p-4 border border-slate-200 hover:border-emerald-500 rounded-2xl text-left font-bold text-slate-700 hover:bg-emerald-50/50 transition-all">
+                        <span>Medium Scale Farm (200 - 1,000 head)</span>
+                    </button>
+                    <button onclick="selectQuizSize('Commercial Farm (1000+ head)')" class="p-4 border border-slate-200 hover:border-emerald-500 rounded-2xl text-left font-bold text-slate-700 hover:bg-emerald-50/50 transition-all">
+                        <span>Commercial Scale Farm (1,000+ head)</span>
+                    </button>
+                </div>
+            </div>
+            <div id="quiz-step-3" class="space-y-4 hidden">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block">Step 3 of 3</span>
+                <h3 class="text-xl font-black text-slate-900">Let's send your personalized feed schedule!</h3>
+                <p class="text-xs text-slate-500">Enter your details to calculate the exact formulation matching your scale and livestock type.</p>
+                <form onsubmit="handleQuizLeadSubmit(event)" class="space-y-3 pt-2">
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1 text-left">Your Name</label>
+                        <input type="text" id="quiz-lead-name" required placeholder="Your Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1 text-left">Phone Number</label>
+                        <input type="tel" id="quiz-lead-phone" required placeholder="e.g. 0799008282" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center space-x-2 mt-4">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>Get My Formulation Plan</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Product Inquiry Modal -->
+    <div id="inquiry-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4 hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="toggleInquiryModal(false)" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="space-y-4">
+                <h3 class="text-xl font-black text-slate-900">Direct Product Inquiry</h3>
+                <p class="text-xs text-slate-500">You are inquiring about: <strong id="inquiry-product-name" class="text-emerald-700">Premium Broiler Mash</strong></p>
+                <form onsubmit="handleProductInquirySubmit(event)" class="space-y-3">
+                    <input type="hidden" id="inquiry-product-hidden">
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1 text-left">Your Name</label>
+                        <input type="text" id="inquiry-lead-name" required placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1 text-left">Your WhatsApp Phone Number</label>
+                        <input type="tel" id="inquiry-lead-phone" required placeholder="e.g. 0799008282" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1 text-left">Your Location (County)</label>
+                        <input type="text" id="inquiry-lead-location" required placeholder="e.g. Nakuru, Eldoret, Nairobi" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center space-x-2 mt-4">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Start WhatsApp Sales Chat</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-emerald-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="scrollToSection('hero')">
+                    <div class="bg-gradient-to-tr from-primary-600 to-emerald-400 p-2.5 rounded-2xl shadow-md flex items-center justify-center">
+                        <i class="fa-solid fa-cow text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-primary-900 via-primary-700 to-emerald-600 bg-clip-text text-transparent">FARM BEST</span>
+                        <span class="block text-xs font-semibold tracking-widest text-emerald-600 uppercase">KENYA</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+                    <a href="#products" class="hover:text-primary-600 transition-colors">Product Hub</a>
+                    <a href="#calculator" class="hover:text-primary-600 transition-colors">Yield Calculator</a>
+                    <a href="#advisory" class="hover:text-primary-600 transition-colors">Vet & Consultation</a>
+                    <a href="#why-us" class="hover:text-primary-600 transition-colors">Our Standard</a>
+                    <button onclick="toggleQuizModal(true)" class="text-emerald-600 hover:text-emerald-700 transition-colors flex items-center space-x-1 font-bold">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Feed Quiz</span>
+                    </button>
+                </nav>
+
+                <!-- Action Controls (Cart & Direct Call) -->
+                <div class="flex items-center space-x-4">
+                    <!-- Dynamic Shopping Cart Icon -->
+                    <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-full hover:bg-slate-100 transition-all focus:outline-none">
+                        <i class="fa-solid fa-basket-shopping text-xl text-slate-700"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white font-bold text-xs rounded-full w-5 h-5 flex items-center justify-center scale-0 transition-transform">0</span>
+                    </button>
+
+                    <!-- Primary WhatsApp Direct Contact Link -->
+                    <a href="https://wa.me/254799008282?text=Hi%20Farm%20Best%20Kenya%2C%20I'd%20like%20to%20inquire%20about%20your%20services%20and%20products." target="_blank" class="hidden sm:inline-flex items-center justify-center px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow-lg transition-all space-x-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Contact Sales</span>
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-100 px-4 py-4 space-y-3 shadow-inner">
+            <a href="#products" onclick="toggleMobileMenu()" class="block font-medium py-2 text-slate-700 hover:text-primary-600 border-b border-slate-50">Product Hub</a>
+            <a href="#calculator" onclick="toggleMobileMenu()" class="block font-medium py-2 text-slate-700 hover:text-primary-600 border-b border-slate-50">Yield Calculator</a>
+            <a href="#advisory" onclick="toggleMobileMenu()" class="block font-medium py-2 text-slate-700 hover:text-primary-600 border-b border-slate-50">Vet & Consultation</a>
+            <a href="#why-us" onclick="toggleMobileMenu()" class="block font-medium py-2 text-slate-700 hover:text-primary-600">Our Standard</a>
+            <button onclick="toggleMobileMenu(); toggleQuizModal(true);" class="w-full text-left font-semibold py-2 text-emerald-600 flex items-center space-x-1.5 border-b border-slate-50">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Get Customized Feed Plan Quiz</span>
+            </button>
+            <a href="https://wa.me/254799008282" target="_blank" class="flex items-center justify-center w-full py-3 rounded-xl bg-emerald-600 text-white text-center font-bold tracking-wide space-x-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Direct WhatsApp Chat</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero / Intro Section -->
+    <section id="hero" class="relative overflow-hidden bg-gradient-to-b from-emerald-50 via-emerald-50/50 to-white pt-10 pb-20 md:py-28">
+        <!-- SVG Decorative elements -->
+        <div class="absolute inset-0 pointer-events-none opacity-30">
+            <svg class="absolute right-0 top-0 w-1/2 h-full text-emerald-200/50" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polygon points="50,0 100,0 100,100 0,100" />
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Column Text Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-full text-emerald-800 text-xs font-bold tracking-wide uppercase shadow-sm">
+                        <i class="fa-solid fa-medal"></i>
+                        <span>Kenya's Premier Livestock & Feed Authority</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight">
+                        Powering Kenyan Farms With <span class="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent">Premium Feeds</span> & Pro Health Care
+                    </h1>
+                    
+                    <p class="text-slate-600 text-lg max-w-2xl mx-auto lg:mx-0 font-medium">
+                        Accelerate feed efficiency, ensure zero-risk animal health with top-tier vaccines, and access the country's most reputable distribution network for livestock products. 
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#products" class="w-full sm:w-auto px-8 py-4 bg-emerald-600 text-white font-extrabold rounded-2xl hover:bg-emerald-700 shadow-lg hover:shadow-emerald-600/25 transition-all text-center flex items-center justify-center space-x-2 transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span>Explore Store Products</span>
+                        </a>
+                        <a href="#calculator" class="w-full sm:w-auto px-8 py-4 bg-white text-slate-800 border-2 border-slate-200 hover:border-emerald-600 font-extrabold rounded-2xl hover:bg-slate-50 transition-all text-center flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-calculator text-emerald-600"></i>
+                            <span>Estimate Feed Demand</span>
+                        </a>
+                    </div>
+
+                    <!-- Client Trust & Support Stats -->
+                    <div class="pt-6 grid grid-cols-3 gap-4 border-t border-emerald-100/80 max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <span class="block text-2xl font-black text-slate-900">10,000+</span>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Farmers Served</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-black text-slate-900">98.4%</span>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Satisfaction</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-black text-slate-900">100%</span>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Quality Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column Showcase Card -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative bg-gradient-to-br from-emerald-700 to-emerald-900 p-8 rounded-3xl shadow-2xl text-white overflow-hidden transform lg:rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <!-- Decorative glow -->
+                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500/25 rounded-full blur-2xl"></div>
+                        
+                        <!-- Header with dynamic location label -->
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-xs uppercase tracking-widest font-extrabold text-emerald-300">Daily Feature Offer</span>
+                            <span class="px-2.5 py-1 rounded-full bg-emerald-800 text-emerald-300 text-xs font-bold"><i class="fa-solid fa-location-dot mr-1"></i> Rift Valley Hub</span>
+                        </div>
+
+                        <!-- Illustrated product item representation with real imagery -->
+                        <div class="space-y-4">
+                            <div class="flex justify-center py-4">
+                                <div class="relative bg-white/10 p-1.5 rounded-2xl border border-white/20 shadow-inner flex items-center justify-center w-full h-44 overflow-hidden group">
+                                    <img src="https://images.unsplash.com/photo-1545147986-a9d6f210df7a?auto=format&fit=crop&w=600&q=80" 
+                                         alt="Premium Broiler Feed" 
+                                         class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
+                                         onerror="this.src='https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80'">
+                                    <div class="absolute inset-0 bg-black/35 flex items-center justify-center">
+                                        <i class="fa-solid fa-wheat-awn text-4xl text-amberAccent-500 drop-shadow-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-2xl font-black tracking-tight text-center">FARM BEST Broiler Finisher</h3>
+                            <p class="text-xs text-emerald-100 text-center max-w-sm mx-auto">
+                                Premium high-nutrition feed formula tailored for Kenyan broiler enterprises, unlocking an outstanding FCR ratio of 1.8x.
+                            </p>
+
+                            <!-- Add to Quick Order button -->
+                            <div class="pt-4 flex justify-between items-center border-t border-white/10">
+                                <div>
+                                    <span class="block text-xs uppercase tracking-wider text-emerald-300">Specially Priced at</span>
+                                    <span class="text-xl font-black">KES 3,250 <span class="text-xs font-normal">/ 50KG Bag</span></span>
+                                </div>
+                                <button onclick="quickAdd('FARM BEST Broiler Finisher (50KG Bag)', 3250)" class="bg-amberAccent-500 hover:bg-amberAccent-600 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5 hover:scale-105">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                    <span>Quick Add</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Hub Section -->
+    <section id="products" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-sm font-bold text-emerald-600 uppercase tracking-widest block">Complete Portfolio</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Explore Premium Farm Products</h2>
+                <p class="text-slate-600 font-medium">
+                    Order highest quality products straight to your farm. Choose animal feeds, critical veterinary pharmaceuticals, or wholesale fresh proteins. We guarantee certified compliance.
+                </p>
+            </div>
+
+            <!-- Tab Filtering Controls -->
+            <div class="mt-12 flex flex-wrap justify-center gap-2 max-w-xl mx-auto bg-slate-100 p-1.5 rounded-2xl">
+                <button onclick="filterProducts('all')" id="tab-all" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-emerald-600 text-white shadow-sm">All Products</button>
+                <button onclick="filterProducts('feed')" id="tab-feed" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-emerald-600">Feeds & Nutrition</button>
+                <button onclick="filterProducts('health')" id="tab-health" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-emerald-600">Animal Health</button>
+                <button onclick="filterProducts('protein')" id="tab-protein" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-emerald-600">Fresh Proteins</button>
+            </div>
+
+            <!-- Products Grid Container -->
+            <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-grid">
+                
+                <!-- FEED PRODUCTS -->
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="feed">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-green-100 text-green-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Nutrition</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>In Stock</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Broiler Mash" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1545147986-a9d6f210df7a?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Premium Broiler Mash</h3>
+                        <p class="text-xs text-slate-500 mt-1">Highly balanced starter feed packed with essential amino acids and enzymes for maximum growth output.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Pack Size: 50KG Bag</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 3,450</span>
+                            <button onclick="quickAdd('Premium Broiler Mash (50KG Bag)', 3450)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Premium Broiler Mash (50KG Bag)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="feed">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-green-100 text-green-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Nutrition</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>In Stock</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1527153857715-3908f2bac5e8?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Dairy Cows Feeding" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Elite Dairy Meal (High Yield)</h3>
+                        <p class="text-xs text-slate-500 mt-1">Formulated specifically to stimulate consistent and maximum daily lactation volumes in dairy cattle.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Pack Size: 50KG Bag</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 2,900</span>
+                            <button onclick="quickAdd('Elite Dairy Meal (50KG Bag)', 2900)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Elite Dairy Meal (50KG Bag)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- HEALTH PRODUCTS -->
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="health">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Biosecurity</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>In Stock</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Veterinary Treatment" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Newcastle Disease Vaccine</h3>
+                        <p class="text-xs text-slate-500 mt-1">High potency preventive vaccine for flocks to prevent disease outbreaks. High efficacy certified.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Vial Capacity: 1000 Doses</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 1,800</span>
+                            <button onclick="quickAdd('Newcastle Disease Vaccine (1000 Doses)', 1800)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Newcastle Disease Vaccine (1000 Doses)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="health">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Vitamins</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>In Stock</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Vitamins and Liquid Supplement" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Farm Best Multivitamin Boost</h3>
+                        <p class="text-xs text-slate-500 mt-1">Liquid multivitamin additive for drinking water. Promotes immediate immune recovery during stress periods.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Bottle Volume: 1 Litre</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 2,400</span>
+                            <button onclick="quickAdd('Multivitamin Boost (1 Litre)', 2400)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Multivitamin Boost (1 Litre)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PROTEIN PRODUCTS -->
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="protein">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-red-100 text-red-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Premium Meat</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-truck-fast text-emerald-500 mr-1"></i>Cold Chain</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Premium Beef Sirloin" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">A-Grade Beef Sirloin Cuts</h3>
+                        <p class="text-xs text-slate-500 mt-1">Finely trimmed, premium grade local beef. Aged under rigorous cold-chain systems for optimum flavor profiles.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Minimum Order: 5 KG Pack</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 4,750</span>
+                            <button onclick="quickAdd('Premium Beef Sirloin (5 KG Pack)', 4750)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Premium Beef Sirloin (5 KG Pack)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="protein">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-red-100 text-red-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Premium Meat</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-truck-fast text-emerald-500 mr-1"></i>Cold Chain</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Organic Eggs" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Organic Table Eggs Crates</h3>
+                        <p class="text-xs text-slate-500 mt-1">Farm fresh, double-sorted brown table eggs packed in clean cardboard crates ready for local markets or retail.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Wholesale Pack: 10 Crates</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 3,800</span>
+                            <button onclick="quickAdd('Organic Eggs (10 Crates)', 3800)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Organic Eggs (10 Crates)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ADD-ON PRODUCTS -->
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="feed">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-green-100 text-green-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Nutrition</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>In Stock</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Chicks Feeding" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Premium Layer Chick Mash</h3>
+                        <p class="text-xs text-slate-500 mt-1">Promotes steady skeletal growth and strong early immunities for healthy, productive future laying hens.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Pack Size: 50KG Bag</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 3,100</span>
+                            <button onclick="quickAdd('Premium Layer Chick Mash (50KG Bag)', 3100)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Premium Layer Chick Mash (50KG Bag)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-card bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between" data-category="health">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-extrabold px-2.5 py-1 rounded-full uppercase">Livestock Care</span>
+                            <span class="text-slate-400 text-xs"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>In Stock</span>
+                        </div>
+                        <div class="h-44 my-4 rounded-2xl overflow-hidden relative group">
+                            <img src="https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?auto=format&fit=crop&w=450&q=80" 
+                                 alt="Livestock Sheep Cattle" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                                 onerror="this.src='https://images.unsplash.com/photo-1527153857715-3908f2bac5e8?auto=format&fit=crop&w=450&q=80'">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Dewormer Complete (Liquid)</h3>
+                        <p class="text-xs text-slate-500 mt-1">Broad spectrum dewormer targeting internal parasites in cattle, sheep, and pigs. Promotes clean growth.</p>
+                        <span class="block text-xs font-semibold text-emerald-600 mt-2">Bottle Volume: 500 ML</span>
+                    </div>
+                    <div class="pt-5 border-t border-slate-100 flex flex-col gap-2 mt-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900">KES 1,500</span>
+                            <button onclick="quickAdd('Dewormer Complete (500 ML)', 1500)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl transition-all shadow-md flex items-center space-x-1 text-xs font-bold">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <button onclick="triggerInquiry('Dewormer Complete (500 ML)')" class="w-full mt-1 border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 text-center py-1.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Direct Inquiry</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Feed & Yield Calculator -->
+    <section id="calculator" class="py-20 bg-slate-100 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Details Content -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-sm font-bold text-emerald-600 uppercase tracking-widest block">Yield Optimizer</span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">Interactive Feed & Profit Estimator</h2>
+                    <p class="text-slate-600 font-medium leading-relaxed">
+                        Input your parameters to get instant scientific predictions on required feed bags, total direct investment, and projected profits based on current Kenyan pricing and standards.
+                    </p>
+                    <div class="space-y-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-emerald-100 p-2 rounded-lg text-emerald-700 mt-1">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <p class="text-xs text-slate-600"><strong class="text-slate-800">Cargill-Standard Ratios:</strong> Standard scientific formulas applied to avoid costly feed wastage and overstock.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-emerald-100 p-2 rounded-lg text-emerald-700 mt-1">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <p class="text-xs text-slate-600"><strong class="text-slate-800">Direct Order Syncing:</strong> Automatically add calculated feed results straight to your purchase order cart.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Interactive Calculator Form Block -->
+                <div class="lg:col-span-7">
+                    <div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <!-- Livestock Selection -->
+                            <div>
+                                <label class="block text-xs font-extrabold uppercase tracking-wide text-slate-500 mb-2">Livestock Type</label>
+                                <select id="calc-type" onchange="runFeedCalculation()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-bold text-slate-800">
+                                    <option value="broiler">Broilers (Meat Chickens)</option>
+                                    <option value="layer">Layers (Egg Layers)</option>
+                                    <option value="dairy">Dairy Cows (Milk Production)</option>
+                                </select>
+                            </div>
+
+                            <!-- Herd/Flock Size Input -->
+                            <div>
+                                <label class="block text-xs font-extrabold uppercase tracking-wide text-slate-500 mb-2">Flock / Herd Size</label>
+                                <div class="relative">
+                                    <input type="number" id="calc-qty" value="500" min="10" oninput="runFeedCalculation()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-bold text-slate-800">
+                                    <span class="absolute right-4 top-3 text-sm text-slate-400 font-semibold">Head</span>
+                                </div>
+                            </div>
+
+                            <!-- Duration Selection -->
+                            <div>
+                                <label class="block text-xs font-extrabold uppercase tracking-wide text-slate-500 mb-2">Cycle Duration</label>
+                                <select id="calc-duration" onchange="runFeedCalculation()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-bold text-slate-800">
+                                    <option value="6">6 Weeks (Standard Broiler Weight)</option>
+                                    <option value="8">8 Weeks (Extended Cycle)</option>
+                                    <option value="12">12 Weeks (Layer Development)</option>
+                                    <option value="24">24 Weeks (Full Lactation Cycle Portion)</option>
+                                </select>
+                            </div>
+
+                            <!-- Dynamic Input Extra Factor -->
+                            <div>
+                                <label class="block text-xs font-extrabold uppercase tracking-wide text-slate-500 mb-2">Feed Quality Focus</label>
+                                <select id="calc-quality" onchange="runFeedCalculation()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-bold text-slate-800">
+                                    <option value="elite">Elite Farm Best Formulas (+5% efficiency)</option>
+                                    <option value="standard">Standard Formulas</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- Outputs Display Panel -->
+                        <div class="mt-8 bg-slate-950 text-white rounded-2xl p-6 relative overflow-hidden">
+                            <!-- Background glow -->
+                            <div class="absolute right-0 top-0 w-32 h-32 bg-emerald-600/20 rounded-full blur-xl"></div>
+                            
+                            <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Calculated Estimates</h3>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 relative z-10">
+                                <div>
+                                    <span class="block text-xs text-slate-400 uppercase tracking-wider font-semibold">Feed Needed</span>
+                                    <span id="res-feed-bags" class="text-2xl font-black text-white">35 <span class="text-sm font-bold text-emerald-400">Bags</span></span>
+                                    <span class="block text-[10px] text-slate-500">(50KG per Bag)</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs text-slate-400 uppercase tracking-wider font-semibold">Total Feed Cost</span>
+                                    <span id="res-feed-cost" class="text-2xl font-black text-white">KES 120,750</span>
+                                </div>
+                                <div class="col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6">
+                                    <span class="block text-xs text-slate-400 uppercase tracking-wider font-semibold">Est. Yield Value</span>
+                                    <span id="res-yield" class="text-2xl font-black text-emerald-400">KES 225,000</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <span class="text-xs text-slate-400">Note: Actual results may vary depending on local health issues and weather conditions.</span>
+                                <button onclick="addCalculatedToCart()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center space-x-1.5 hover:scale-102">
+                                    <i class="fa-solid fa-cart-arrow-down"></i>
+                                    <span>Add Calculated To Cart</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="why-us" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-sm font-bold text-emerald-600 uppercase tracking-widest block">Premium Standard</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Engineered for Agricultural Longevity</h2>
+                <p class="text-slate-600 font-medium">
+                    We bridge the quality standards of global companies directly with local farmers throughout Kenya, guaranteeing high yield, continuous bio-security, and high-margin protein products.
+                </p>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <div class="bg-slate-50 border border-slate-100 p-8 rounded-3xl hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-flask-vial"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Scientific Formulations</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Every batch of Farm Best feed and veterinary pharmaceuticals is subjected to systematic laboratory testing before packaging, achieving unmatched levels of biosecurity.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-50 border border-slate-100 p-8 rounded-3xl hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Dynamic Cold Chain Supply</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Our processed meats, proteins, and temperature-sensitive biological vaccines are packaged and moved in state-of-the-art climate-controlled environments.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-50 border border-slate-100 p-8 rounded-3xl hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">On-Demand Expert Advisory</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Access advice from our certified animal health and nutritionists. We help evaluate and advise custom feed schedules and preventive biosecurity plans.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Veterinary & Consulting Advisory Form -->
+    <section id="advisory" class="py-20 bg-slate-50 border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-emerald-800 to-emerald-950 rounded-3xl overflow-hidden shadow-2xl relative">
+                
+                <!-- Aesthetic overlay pattern -->
+                <div class="absolute inset-0 opacity-10 pointer-events-none">
+                    <svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <circle cx="20" cy="20" r="15" />
+                        <circle cx="80" cy="80" r="25" />
+                    </svg>
+                </div>
+
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 sm:p-12 lg:p-16 items-center">
+                    
+                    <!-- Text Content -->
+                    <div class="text-white space-y-6">
+                        <span class="text-emerald-300 text-sm uppercase tracking-widest font-extrabold flex items-center">
+                            <i class="fa-solid fa-stethoscope mr-2"></i> Vet & Consulting Support
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-black leading-tight">Book an On-Farm Professional Assessment</h2>
+                        <p class="text-emerald-100 font-medium leading-relaxed">
+                            Stop guessing herd treatment programs. Book a verified animal health technician or nutritionist to visit your operation and perform professional diagnostic assessments.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-6">
+                            <div class="flex items-center space-x-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10">
+                                <i class="fa-solid fa-calendar-check text-emerald-300 text-2xl"></i>
+                                <div>
+                                    <span class="block text-xs text-slate-300 uppercase font-semibold">Fast Booking</span>
+                                    <span class="text-sm font-bold">Responds within 2 hrs</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10">
+                                <i class="fa-solid fa-house-chimney-medical text-emerald-300 text-2xl"></i>
+                                <div>
+                                    <span class="block text-xs text-slate-300 uppercase font-semibold">Visit Type</span>
+                                    <span class="text-sm font-bold">Physical or Virtual</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Booking Form -->
+                    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl text-slate-800">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6">Schedule Advisory Request</h3>
+                        <form id="booking-form" onsubmit="handleBookingSubmission(event)" class="space-y-4">
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1.5">Your Name</label>
+                                    <input type="text" id="booking-name" required placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1.5">Phone Number</label>
+                                    <input type="tel" required placeholder="0799008282" id="booking-phone" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1.5">Location (County)</label>
+                                    <input type="text" id="booking-county" required placeholder="e.g. Nakuru, Kiambu, Uasin Gishu" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1.5">Advisory Focus</label>
+                                    <select id="booking-focus" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                                        <option value="feed">Feed Formulation Planning</option>
+                                        <option value="vaccination">Vaccination & Herd Health</option>
+                                        <option value="meat">Wholesale Meats Partnerships</option>
+                                        <option value="other">General Consultation</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1.5">Brief Farm Details (Optional)</label>
+                                <textarea id="booking-details" rows="3" placeholder="Tell us about your livestock size, ages, or any specific health issues..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-slate-800"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Request Expert Consultation</span>
+                            </button>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide-out Shopping Cart Drawer -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 pointer-events-none overflow-hidden hidden">
+        <!-- Overlay -->
+        <div id="cart-overlay" onclick="toggleCartDrawer(false)" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs opacity-0 transition-opacity duration-300 pointer-events-auto"></div>
+        
+        <!-- Main Drawer Panel -->
+        <div id="cart-panel" class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto">
+            
+            <!-- Drawer Header -->
+            <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-basket-shopping text-emerald-600 text-lg"></i>
+                    <h2 class="text-lg font-bold text-slate-900">Your Checkout Basket</h2>
+                </div>
+                <button onclick="toggleCartDrawer(false)" class="p-2 rounded-lg hover:bg-slate-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg text-slate-500"></i>
+                </button>
+            </div>
+
+            <!-- Drawer Scrollable Body -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-4 space-y-4 custom-scrollbar">
+                <!-- Lead Recovery Banner on Abandoned Cart -->
+                <div id="cart-abandon-banner" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2 hidden">
+                    <div class="flex items-start space-x-2">
+                        <i class="fa-solid fa-truck-fast text-amber-600 text-base mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800">Lock in Free Shipping Offer!</p>
+                            <p class="text-[10px] text-slate-600">Enter your number to save your progress and get free on-farm delivery.</p>
+                        </div>
+                    </div>
+                    <form onsubmit="handleCartAbandonLead(event)" class="flex gap-2">
+                        <input type="tel" id="cart-abandon-phone" required placeholder="0799008282" class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-emerald-500 font-semibold text-slate-800">
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-3 py-1.5 rounded-xl text-xs transition-all">Save Cart</button>
+                    </form>
+                </div>
+
+                <!-- Fallback empty state -->
+                <div id="cart-empty-state" class="flex flex-col items-center justify-center h-64 text-center">
+                    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4">
+                        <i class="fa-solid fa-cart-shopping text-3xl"></i>
+                    </div>
+                    <p class="font-semibold text-slate-700">Your basket is currently empty</p>
+                    <p class="text-xs text-slate-400 mt-1 max-w-xs">Explore products to add livestock feed, veterinary health vaccines, or fresh meat products.</p>
+                </div>
+                
+                <!-- Dynamic Items Inserted Here -->
+            </div>
+
+            <!-- Drawer Footer and Checkout Summary -->
+            <div class="p-6 border-t border-slate-100 bg-slate-50 space-y-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm text-slate-500 font-medium">
+                        <span>Items Subtotal</span>
+                        <span id="cart-subtotal">KES 0</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-slate-500 font-medium">
+                        <span>Estimated Delivery Fee</span>
+                        <span class="text-emerald-600 font-semibold">TBD / Dynamic</span>
+                    </div>
+                    <div class="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-200">
+                        <span>Grand Total (Ksh)</span>
+                        <span id="cart-grandtotal">KES 0</span>
+                    </div>
+                </div>
+
+                <!-- Live Direct WhatsApp Ordering Actions -->
+                <button onclick="triggerWhatsAppOrder()" class="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black tracking-wide flex items-center justify-center space-x-2 shadow-lg hover:shadow-emerald-600/25 transition-all text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Checkout & Order via WhatsApp</span>
+                </button>
+                <p class="text-[10px] text-slate-400 text-center">
+                    Proceeding automatically packages your product list and opens a pre-composed direct order line on Farm Best WhatsApp Sales team.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Live Real-Time Lead CRM System Panel -->
+    <section id="crm-panel-section" class="py-12 bg-slate-900 border-t border-slate-800 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-dot text-emerald-500 animate-pulse"></i>
+                            <h2 class="text-2xl font-black text-white">Farm Best Kenya CRM Dashboard</h2>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Real-time prospect tracker, lead captures, and conversions dashboard.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="exportLeadsToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-md">
+                            <i class="fa-solid fa-file-csv"></i>
+                            <span>Export All Leads (CSV)</span>
+                        </button>
+                        <button onclick="clearDemoLeads()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition-all">
+                            Clear Demo Entries
+                        </button>
+                        <button onclick="toggleCRMDashboard(false)" class="bg-red-950/60 hover:bg-red-900 text-red-400 px-4 py-2 rounded-xl text-xs font-bold transition-all border border-red-900/40">
+                            Close CRM View
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Panel -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="block text-xs text-slate-400 uppercase font-semibold">Total Leads Captured</span>
+                        <span id="crm-stat-total" class="text-2xl font-black text-white mt-1">0</span>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="block text-xs text-slate-400 uppercase font-semibold">Consulations Booked</span>
+                        <span id="crm-stat-consult" class="text-2xl font-black text-emerald-400 mt-1">0</span>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="block text-xs text-slate-400 uppercase font-semibold">Product Inquiries</span>
+                        <span id="crm-stat-inquiry" class="text-2xl font-black text-blue-400 mt-1">0</span>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="block text-xs text-slate-400 uppercase font-semibold">Exit Guide Requests</span>
+                        <span id="crm-stat-exit" class="text-2xl font-black text-amber-400 mt-1">0</span>
+                    </div>
+                </div>
+
+                <!-- Search & Filters -->
+                <div class="flex gap-4">
+                    <input type="text" id="crm-search-input" oninput="renderCRMLeads()" placeholder="Search by name or phone..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-semibold text-white">
+                    <select id="crm-filter-status" onchange="renderCRMLeads()" class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 font-bold text-slate-300">
+                        <option value="all">All Lead Statuses</option>
+                        <option value="New">New</option>
+                        <option value="Contacted">Contacted</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <!-- Leads Table -->
+                <div class="overflow-x-auto border border-slate-800 rounded-2xl">
+                    <table class="min-w-full divide-y divide-slate-800 text-left text-sm">
+                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] font-extrabold tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Lead Name</th>
+                                <th class="px-6 py-4">Phone Number</th>
+                                <th class="px-6 py-4">Location</th>
+                                <th class="px-6 py-4">Source Category</th>
+                                <th class="px-6 py-4">Details Summary</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="crm-table-body" class="divide-y divide-slate-850 bg-slate-950 text-slate-300 font-medium">
+                            <!-- Live Dynamic Lead Rows -->
+                        </tbody>
+                    </table>
+                    <div id="crm-empty-state" class="py-12 text-center text-slate-500 hidden">
+                        <i class="fa-solid fa-folder-open text-3xl mb-2"></i>
+                        <p class="text-xs">No matching leads found inside database.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-900 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                
+                <!-- Brand Bio -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="bg-emerald-600 p-2 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-cow text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-extrabold tracking-tight text-white">FARM BEST <span class="block text-[10px] tracking-widest text-emerald-400 uppercase">KENYA</span></span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Unifying scientific livestock feeds, elite veterinary pharmaceuticals, and dynamic fresh products into Kenya's premium agricultural supply hub.
+                    </p>
+                    <div class="flex space-x-3 text-slate-400">
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white transition-all"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white transition-all"><i class="fa-brands fa-x-twitter text-sm"></i></a>
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white transition-all"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white transition-all"><i class="fa-brands fa-linkedin-in text-sm"></i></a>
+                    </div>
+                </div>
+
+                <!-- Products Quicklinks -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Our Portfolios</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li><a href="#products" onclick="filterProducts('feed')" class="hover:text-emerald-400 transition-colors">Animal Feed & Formulations</a></li>
+                        <li><a href="#products" onclick="filterProducts('health')" class="hover:text-emerald-400 transition-colors">Veterinary Biosecurity & Vaccines</a></li>
+                        <li><a href="#products" onclick="filterProducts('protein')" class="hover:text-emerald-400 transition-colors">Premium Fresh Beef & Poultry</a></li>
+                        <li><a href="#products" onclick="filterProducts('protein')" class="hover:text-emerald-400 transition-colors">High Yield Crates of Eggs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources Links -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Services & Tools</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li><a href="#calculator" class="hover:text-emerald-400 transition-colors">Herd Feed Estimator</a></li>
+                        <li><a href="#advisory" class="hover:text-emerald-400 transition-colors">Book Veterinary Visits</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-colors">B2B Distributor Program</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-colors">Corporate Quality Certifications</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Branches -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Farm Best Hubs</h4>
+                    <ul class="space-y-3 text-xs text-slate-400">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-location-dot text-emerald-500 mt-0.5"></i>
+                            <span>Nairobi HQ: Industrial Area, Enterprise Road, Building B</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-location-dot text-emerald-500 mt-0.5"></i>
+                            <span>Rift Valley Hub: Nakuru-Eldoret Highway, Depot Complex</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-envelope text-emerald-500"></i>
+                            <span>support@farmbest.co.ke</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-phone text-emerald-500"></i>
+                            <span>+254 799 008 282</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Copyright footer row -->
+            <div class="mt-12 pt-8 border-t border-slate-800 text-center flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <span>&copy; 2026 Farm Best Kenya. All Rights Reserved. Standards Compliant.</span>
+                <div class="flex items-center space-x-6">
+                    <a href="#" class="hover:underline">Privacy Policy</a>
+                    <a href="#" class="hover:underline">Wholesale Terms</a>
+                    <!-- Custom Secure CRM Portal Access Key -->
+                    <button onclick="promptPasscodeForCRM()" class="text-emerald-500 hover:text-emerald-400 underline font-bold focus:outline-none flex items-center space-x-1">
+                        <i class="fa-solid fa-lock text-[10px]"></i>
+                        <span>Admin CRM Portal</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modularized Firebase and CRM Logic integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global configuration bindings
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'farm-best-kenya-app';
+        let firebaseConfig;
+        if (typeof __firebase_config !== 'undefined') {
+            firebaseConfig = JSON.parse(__firebase_config);
+        } else {
+            // High efficiency simulated configurations for preview environment
+            firebaseConfig = {
+                apiKey: "mock-apiKey-value",
+                authDomain: "mock-authDomain-value",
+                projectId: "mock-projectId-value",
+                storageBucket: "mock-storageBucket-value",
+                messagingSenderId: "mock-messagingSenderId-value",
+                appId: "mock-appId-value"
+            };
+        }
+
+        let db = null;
+        let auth = null;
+        let isFirebaseActive = false;
+
+        // Try initializing Firestore securely
+        try {
+            if (firebaseConfig.apiKey !== "mock-apiKey-value") {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                isFirebaseActive = true;
+                
+                // RULE 3 - Authenticate first asynchronously
+                await signInAnonymously(auth);
+                console.log("Farm Best CRM: Secured Auth Session.");
+            }
+        } catch (e) {
+            console.warn("Farm Best CRM: Working in local fallback sandbox.", e);
+        }
+
+        // Exposed global Firestore write wrapper securely following RULE 1
+        window.saveLeadToDatabase = async function(leadData) {
+            // Local state push first so we never lose anything
+            window.localLeadsDatabase.unshift({
+                ...leadData,
+                id: crypto.randomUUID(),
+                status: 'New',
+                timestamp: new Date().toISOString()
+            });
+            window.syncCRMAccess();
+
+            // Firebase sync if active following strict paths rules
+            if (isFirebaseActive && auth.currentUser) {
+                try {
+                    const collectionPath = collection(db, 'artifacts', appId, 'public', 'data', 'leads');
+                    await addDoc(collectionPath, {
+                        ...leadData,
+                        userId: auth.currentUser.uid,
+                        status: 'New',
+                        timestamp: new Date().toISOString()
+                    });
+                    console.log("Farm Best CRM: Synchronized lead to cloud Firestore.");
+                } catch (err) {
+                    console.error("Farm Best CRM error syncing to Firestore:", err);
+                }
+            }
+        };
+
+        // Realtime updates if active
+        if (isFirebaseActive && auth?.currentUser) {
+            try {
+                const leadsCollection = collection(db, 'artifacts', appId, 'public', 'data', 'leads');
+                onSnapshot(leadsCollection, (snapshot) => {
+                    const temp = [];
+                    snapshot.forEach((doc) => {
+                        temp.push({ id: doc.id, ...doc.data() });
+                    });
+                    if (temp.length > 0) {
+                        // Merge with local storage ensuring unique values
+                        const merged = [...temp];
+                        window.localLeadsDatabase.forEach(local => {
+                            if (!merged.find(m => m.phone === local.phone && m.name === local.name)) {
+                                merged.push(local);
+                            }
+                        });
+                        window.localLeadsDatabase = merged.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                        window.syncCRMAccess();
+                    }
+                }, (error) => {
+                    console.debug("Firestore live listener ended or restricted: ", error);
+                });
+            } catch (err) {
+                console.warn("Real-time listener setup bypassed: ", err);
+            }
+        }
+    </script>
+
+    <script>
+        // --- GLOBAL VARIABLES & STATE ---
+        let shoppingCart = [];
+        window.localLeadsDatabase = [
+            {
+                id: "demo-1",
+                name: "Margaret Wanjiku",
+                phone: "0711223344",
+                location: "Nyeri County",
+                category: "Vet Consultation",
+                details: "Requested vaccination schedule formulation and complete diagnostic visit.",
+                status: "Contacted",
+                timestamp: "2026-06-18T10:15:30.000Z"
+            },
+            {
+                id: "demo-2",
+                name: "David Kiprop",
+                phone: "0722446688",
+                location: "Eldoret",
+                category: "Product Inquiry",
+                details: "Inquired about: Premium Broiler Mash (50KG Bag)",
+                status: "New",
+                timestamp: "2026-06-18T13:42:12.000Z"
+            }
+        ];
+
+        // Quiz State machine variables
+        let quizTempState = {
+            focus: '',
+            size: '',
+            name: '',
+            phone: ''
+        };
+
+        // Lead capture variables
+        let isLeadModalShown = false;
+
+        // --- DYNAMIC TOAST NOTIFICATION GENERATOR ---
+        function triggerToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            toast.className = `flex items-center space-x-3 px-5 py-3.5 rounded-2xl shadow-xl border text-sm font-semibold pointer-events-auto transform translate-y-5 opacity-0 transition-all duration-300 ${
+                type === 'success' 
+                    ? 'bg-white border-emerald-100 text-slate-800 shadow-emerald-900/10' 
+                    : 'bg-slate-900 border-slate-800 text-white shadow-slate-950/25'
+            }`;
+            
+            const icon = document.createElement('i');
+            icon.className = type === 'success' ? 'fa-solid fa-circle-check text-emerald-500 text-lg' : 'fa-solid fa-triangle-exclamation text-amber-500 text-lg';
+            
+            const text = document.createElement('span');
+            text.innerText = message;
+            
+            toast.appendChild(icon);
+            toast.appendChild(text);
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-5', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-5', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+
+        // --- NAVIGATION ASSIST ---
+        function scrollToSection(id) {
+            const target = document.getElementById(id);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- PRODUCT FILTER SYSTEM ---
+        function filterProducts(category) {
+            const cards = document.querySelectorAll('.product-card');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            buttons.forEach(btn => {
+                btn.className = 'tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-emerald-600';
+            });
+            
+            const selectedTab = document.getElementById(`tab-${category}`);
+            if (selectedTab) {
+                selectedTab.className = 'tab-btn px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-emerald-600 text-white shadow-sm';
+            }
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all' || cardCat === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // --- DYNAMIC CALCULATOR ALGORITHMS ---
+        function runFeedCalculation() {
+            const type = document.getElementById('calc-type').value;
+            const qty = parseFloat(document.getElementById('calc-qty').value) || 0;
+            const weeks = parseFloat(document.getElementById('calc-duration').value) || 1;
+            const quality = document.getElementById('calc-quality').value;
+
+            let bagsPerHeadPerWeek = 0;
+            let bagCost = 3100;
+            let yieldRevenuePerHeadPerWeek = 0;
+
+            if (type === 'broiler') {
+                bagsPerHeadPerWeek = 0.018;
+                bagCost = 3450;
+                yieldRevenuePerHeadPerWeek = 75;
+            } else if (type === 'layer') {
+                bagsPerHeadPerWeek = 0.016; 
+                bagCost = 3100;
+                yieldRevenuePerHeadPerWeek = 60;
+            } else if (type === 'dairy') {
+                bagsPerHeadPerWeek = 0.28;
+                bagCost = 2900;
+                yieldRevenuePerHeadPerWeek = 1100;
+            }
+
+            if (quality === 'elite') {
+                bagsPerHeadPerWeek = bagsPerHeadPerWeek * 0.95;
+            }
+
+            let totalBags = Math.ceil(bagsPerHeadPerWeek * qty * weeks);
+            if (totalBags < 1 && qty > 0) totalBags = 1;
+
+            const totalCost = totalBags * bagCost;
+            const totalYield = Math.round(yieldRevenuePerHeadPerWeek * qty * weeks);
+
+            document.getElementById('res-feed-bags').innerHTML = `${totalBags} <span class="text-sm font-bold text-emerald-400">Bags</span>`;
+            document.getElementById('res-feed-cost').innerText = `KES ${totalCost.toLocaleString()}`;
+            document.getElementById('res-yield').innerText = `KES ${totalYield.toLocaleString()}`;
+        }
+
+        function addCalculatedToCart() {
+            const type = document.getElementById('calc-type').value;
+            const bagsNode = document.getElementById('res-feed-bags');
+            const totalBags = parseInt(bagsNode.innerText) || 1;
+
+            let productName = "Calculated Broiler Mash Feed Formulation";
+            let unitPrice = 3450;
+
+            if (type === 'layer') {
+                productName = "Calculated Layer Mash Feed Formulation";
+                unitPrice = 3100;
+            } else if (type === 'dairy') {
+                productName = "Calculated Elite Dairy Meal Feed Formulation";
+                unitPrice = 2900;
+            }
+
+            const itemTitle = `${productName} (Bulk x${totalBags} Bags)`;
+            const totalCostVal = totalBags * unitPrice;
+
+            quickAdd(itemTitle, totalCostVal);
+            triggerToast(`Added ${totalBags} bags of custom formula to cart!`);
+        }
+
+        // --- SHOPPING DRAWER & ABANDONMENT RECOVERY ---
+        function toggleCartDrawer(open) {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            const panel = document.getElementById('cart-panel');
+            const abandonBanner = document.getElementById('cart-abandon-banner');
+
+            if (open) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    panel.classList.remove('translate-x-full');
+                }, 50);
+            } else {
+                // Trigger Abandonment popup recovery if items exist and checkout is not completed
+                if (shoppingCart.length > 0 && abandonBanner.classList.contains('hidden')) {
+                    abandonBanner.classList.remove('hidden');
+                }
+                overlay.classList.add('opacity-0');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function quickAdd(name, price) {
+            const existing = shoppingCart.find(item => item.name === name);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                shoppingCart.push({ name, price, qty: 1 });
+            }
+            updateCartUI();
+            triggerToast(`"${name}" added to cart!`);
+        }
+
+        function removeCartItem(index) {
+            shoppingCart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function changeQty(index, amt) {
+            shoppingCart[index].qty += amt;
+            if (shoppingCart[index].qty <= 0) {
+                shoppingCart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-badge');
+            const emptyState = document.getElementById('cart-empty-state');
+            
+            const dynamicNodes = container.querySelectorAll('.dynamic-cart-item');
+            dynamicNodes.forEach(node => node.remove());
+
+            let subtotal = 0;
+            let totalItemsCount = 0;
+
+            if (shoppingCart.length === 0) {
+                emptyState.classList.remove('hidden');
+                badge.classList.add('scale-0');
+                badge.classList.remove('scale-100');
+            } else {
+                emptyState.classList.add('hidden');
+                badge.classList.remove('scale-0');
+                badge.classList.add('scale-100');
+                
+                shoppingCart.forEach((item, index) => {
+                    totalItemsCount += item.qty;
+                    subtotal += (item.price * item.qty);
+
+                    const div = document.createElement('div');
+                    div.className = "dynamic-cart-item bg-slate-50 border border-slate-100 p-4 rounded-2xl flex justify-between items-center relative space-x-2";
+                    
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <span class="block text-xs font-bold text-slate-900 pr-4 leading-tight">${item.name}</span>
+                            <span class="text-xs text-slate-500 block mt-1">KES ${(item.price).toLocaleString()} each</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="changeQty(${index}, -1)" class="w-7 h-7 bg-white hover:bg-slate-200 text-slate-800 border border-slate-200 rounded-lg flex items-center justify-center font-bold text-xs focus:outline-none">-</button>
+                            <span class="text-sm font-bold text-slate-800 w-4 text-center">${item.qty}</span>
+                            <button onclick="changeQty(${index}, 1)" class="w-7 h-7 bg-white hover:bg-slate-200 text-slate-800 border border-slate-200 rounded-lg flex items-center justify-center font-bold text-xs focus:outline-none">+</button>
+                            
+                            <button onclick="removeCartItem(${index})" class="text-slate-400 hover:text-red-500 pl-2 focus:outline-none">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.insertBefore(div, container.firstChild);
+                });
+            }
+
+            badge.innerText = totalItemsCount;
+            document.getElementById('cart-subtotal').innerText = `KES ${subtotal.toLocaleString()}`;
+            document.getElementById('cart-grandtotal').innerText = `KES ${subtotal.toLocaleString()}`;
+        }
+
+        // --- WHATSAPP SUBMISSION ENGINE ---
+        function triggerWhatsAppOrder() {
+            if (shoppingCart.length === 0) {
+                triggerToast("Your cart is currently empty. Please add items to checkout.", "warning");
+                return;
+            }
+
+            let text = "Hello Farm Best Kenya! I would like to place an order with the following details:\n\n";
+            let total = 0;
+
+            shoppingCart.forEach((item, index) => {
+                const lineTotal = item.price * item.qty;
+                total += lineTotal;
+                text += `${index + 1}. *${item.name}* (Qty: ${item.qty}) -> KES ${lineTotal.toLocaleString()}\n`;
+            });
+
+            text += `\n*Grand Subtotal:* KES ${total.toLocaleString()}`;
+            text += `\n\nPlease confirm shipping/delivery costs and supply duration to my farm location. Thank you!`;
+
+            // Capture Lead status update if cart matches lead databases
+            saveLeadToDatabase({
+                name: "Checkout Customer",
+                phone: "WhatsApp Direct",
+                location: "Online Checkout",
+                category: "Cart Checkout",
+                details: `Basket Summary: ${shoppingCart.length} distinct item types totaling KES ${total}`
+            });
+
+            const encodedText = encodeURIComponent(text);
+            const whatsappURL = `https://wa.me/254799008282?text=${encodedText}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // --- CRM PERSISTENCE & CONTROL ---
+        function promptPasscodeForCRM() {
+            const passcode = prompt("Please enter the Admin CRM passcode (default: 1234):");
+            if (passcode === "1234") {
+                toggleCRMDashboard(true);
+                triggerToast("Admin Lead Database Loaded Successfully!", "success");
+            } else if (passcode !== null) {
+                triggerToast("Invalid Admin Passcode! Access Denied.", "warning");
+            }
+        }
+
+        function toggleCRMDashboard(show) {
+            const crmSection = document.getElementById('crm-panel-section');
+            if (show) {
+                crmSection.classList.remove('hidden');
+                crmSection.scrollIntoView({ behavior: 'smooth' });
+                syncCRMAccess();
+            } else {
+                crmSection.classList.add('hidden');
+            }
+        }
+
+        function syncCRMAccess() {
+            renderCRMLeads();
+            updateCRMStats();
+        }
+
+        function updateCRMStats() {
+            const leads = window.localLeadsDatabase;
+            document.getElementById('crm-stat-total').innerText = leads.length;
+            document.getElementById('crm-stat-consult').innerText = leads.filter(l => l.category === 'Vet Consultation').length;
+            document.getElementById('crm-stat-inquiry').innerText = leads.filter(l => l.category === 'Product Inquiry' || l.category === 'Direct Inquiry').length;
+            document.getElementById('crm-stat-exit').innerText = leads.filter(l => l.category === 'Exit Lead magnet' || l.category === 'Quiz Form').length;
+        }
+
+        function renderCRMLeads() {
+            const tbody = document.getElementById('crm-table-body');
+            const searchVal = document.getElementById('crm-search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('crm-filter-status').value;
+            const emptyState = document.getElementById('crm-empty-state');
+
+            tbody.innerHTML = '';
+            let count = 0;
+
+            const sortedLeads = [...window.localLeadsDatabase].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            sortedLeads.forEach(lead => {
+                const matchesSearch = lead.name.toLowerCase().includes(searchVal) || lead.phone.includes(searchVal);
+                const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
+
+                if (matchesSearch && matchesStatus) {
+                    count++;
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-900 border-b border-slate-850 transition-colors";
+                    
+                    const localTime = new Date(lead.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const localDate = new Date(lead.timestamp).toLocaleDateString([], {month: 'short', day: 'numeric'});
+
+                    let badgeColor = "bg-amber-950/60 text-amber-400 border border-amber-900/40";
+                    if (lead.status === "Contacted") badgeColor = "bg-blue-950/60 text-blue-400 border border-blue-900/40";
+                    if (lead.status === "Completed") badgeColor = "bg-emerald-950/60 text-emerald-400 border border-emerald-900/40";
+
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 font-bold text-white">${lead.name}</td>
+                        <td class="px-6 py-4 text-emerald-400">${lead.phone}</td>
+                        <td class="px-6 py-4">${lead.location}</td>
+                        <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase bg-slate-900 border border-slate-850 text-slate-300">${lead.category}</span></td>
+                        <td class="px-6 py-4 text-slate-400 max-w-xs truncate" title="${lead.details}">${lead.details}</td>
+                        <td class="px-6 py-4">
+                            <select onchange="changeLeadStatus('${lead.id}', this.value)" class="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs font-bold text-slate-300">
+                                <option value="New" ${lead.status === 'New' ? 'selected' : ''}>New</option>
+                                <option value="Contacted" ${lead.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                                <option value="Completed" ${lead.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                        </td>
+                        <td class="px-6 py-4 text-right text-xs text-slate-500">${localDate} <span class="block text-[10px]">${localTime}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            });
+
+            if (count === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        function changeLeadStatus(id, newStatus) {
+            const idx = window.localLeadsDatabase.findIndex(l => l.id === id);
+            if (idx !== -1) {
+                window.localLeadsDatabase[idx].status = newStatus;
+                syncCRMAccess();
+                triggerToast(`Lead status updated to: ${newStatus}`, "success");
+            }
+        }
+
+        function clearDemoLeads() {
+            window.localLeadsDatabase = window.localLeadsDatabase.filter(l => !l.id.startsWith('demo-'));
+            syncCRMAccess();
+            triggerToast("Demo entries removed from active view.", "success");
+        }
+
+        function exportLeadsToCSV() {
+            let csv = "Name,Phone,Location,Category,Details,Status,Timestamp\n";
+            window.localLeadsDatabase.forEach(lead => {
+                csv += `"${lead.name}","${lead.phone}","${lead.location}","${lead.category}","${lead.details.replace(/"/g, '""')}","${lead.status}","${lead.timestamp}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `farm_best_leads_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- LEAD CAPTURE SYSTEM EVENTS ---
+
+        // A. Direct Product Inquiries (Triggered via Product Grid Card Buttons)
+        function triggerInquiry(productName) {
+            document.getElementById('inquiry-product-name').innerText = productName;
+            document.getElementById('inquiry-product-hidden').value = productName;
+            toggleInquiryModal(true);
+        }
+
+        function toggleInquiryModal(show) {
+            const modal = document.getElementById('inquiry-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        async function handleProductInquirySubmit(event) {
+            event.preventDefault();
+            const pName = document.getElementById('inquiry-product-hidden').value;
+            const lName = document.getElementById('inquiry-lead-name').value;
+            const lPhone = document.getElementById('inquiry-lead-phone').value;
+            const lLoc = document.getElementById('inquiry-lead-location').value;
+
+            const leadObj = {
+                name: lName,
+                phone: lPhone,
+                location: lLoc,
+                category: "Product Inquiry",
+                details: `Inquired specifically on: ${pName}`
+            };
+
+            await window.saveLeadToDatabase(leadObj);
+            toggleInquiryModal(false);
+            
+            // Redirect smoothly to WhatsApp with custom pre-filled sales text
+            const text = `Hello Farm Best Kenya! My name is ${lName} from ${lLoc}. I am interested in inquiring about: *${pName}*. Please advise on delivery timelines and pricing!`;
+            const encodedText = encodeURIComponent(text);
+            const whatsappURL = `https://wa.me/254799008282?text=${encodedText}`;
+            window.open(whatsappURL, '_blank');
+
+            triggerToast(`Direct sales inquiry processed for ${lName}! Redirecting...`, "success");
+        }
+
+        // B. Exit-Intent Popup Engine
+        function toggleExitModal(show) {
+            const modal = document.getElementById('lead-exit-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        async function handleExitLeadSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('exit-lead-name').value;
+            const phone = document.getElementById('exit-lead-phone').value;
+            const loc = document.getElementById('exit-lead-location').value;
+
+            const leadObj = {
+                name: name,
+                phone: phone,
+                location: loc,
+                category: "Exit Lead magnet",
+                details: "Requested the Free High-Yield Feed & Biosecurity PDF & 10% Coupon Guide."
+            };
+
+            await window.saveLeadToDatabase(leadObj);
+            toggleExitModal(false);
+            
+            triggerToast("Form formulation guide scheduled! Check your WhatsApp.", "success");
+            
+            // Launch WhatsApp with standard trigger text to establish direct live link
+            const text = `Hi Farm Best Kenya! My name is ${name} from ${loc}. I just signed up on your site to get the Free High-Yield Feed PDF guide and my 10% coupon. Thank you!`;
+            const encodedText = encodeURIComponent(text);
+            const whatsappURL = `https://wa.me/254799008282?text=${encodedText}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // C. Feed Selector Quiz Controls
+        function toggleQuizModal(show) {
+            const modal = document.getElementById('quiz-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                resetQuiz();
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-step-1').classList.remove('hidden');
+            document.getElementById('quiz-step-2').classList.add('hidden');
+            document.getElementById('quiz-step-3').classList.add('hidden');
+            quizTempState = { focus: '', size: '', name: '', phone: '' };
+        }
+
+        function selectQuizFocus(focusOption) {
+            quizTempState.focus = focusOption;
+            document.getElementById('quiz-step-1').classList.add('hidden');
+            document.getElementById('quiz-step-2').classList.remove('hidden');
+        }
+
+        function selectQuizSize(sizeOption) {
+            quizTempState.size = sizeOption;
+            document.getElementById('quiz-step-2').classList.add('hidden');
+            document.getElementById('quiz-step-3').classList.remove('hidden');
+        }
+
+        async function handleQuizLeadSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('quiz-lead-name').value;
+            const phone = document.getElementById('quiz-lead-phone').value;
+
+            quizTempState.name = name;
+            quizTempState.phone = phone;
+
+            const leadObj = {
+                name: name,
+                phone: phone,
+                location: "Form Selector Quiz",
+                category: "Quiz Form",
+                details: `Quiz Inputs: Focus -> ${quizTempState.focus} | Size Scale -> ${quizTempState.size}`
+            };
+
+            await window.saveLeadToDatabase(leadObj);
+            toggleQuizModal(false);
+
+            triggerToast("Calculating customized formula parameters! Redirecting to setup expert...", "success");
+
+            // Direct route to WhatsApp
+            const text = `Hello Farm Best! My name is ${name}. I just completed your Feed Guide Quiz. My farm focus is: *${quizTempState.focus}* with a herd/flock size of *${quizTempState.size}*. Please share the corresponding feed formulation sheet!`;
+            const encodedText = encodeURIComponent(text);
+            const whatsappURL = `https://wa.me/254799008282?text=${encodedText}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // D. Consultation Form Submission Custom Capture Handler
+        async function handleBookingSubmission(event) {
+            event.preventDefault();
+            const name = document.getElementById('booking-name').value;
+            const phone = document.getElementById('booking-phone').value;
+            const county = document.getElementById('booking-county').value;
+            const focus = document.getElementById('booking-focus').value;
+            const details = document.getElementById('booking-details').value;
+
+            const leadObj = {
+                name: name,
+                phone: phone,
+                location: county,
+                category: "Vet Consultation",
+                details: `Service Focus: ${focus} | Additional Notes: ${details}`
+            };
+
+            await window.saveLeadToDatabase(leadObj);
+            document.getElementById('booking-form').reset();
+            triggerToast("Assessment request captured! Redirecting to scheduling...", "success");
+
+            // Redirect to confirm
+            const text = `Hi Farm Best Vet Desk! I am ${name} from ${county} County. I have requested a physical/virtual diagnostic consultation regarding *${focus}*. Details: ${details}. Please confirm booking availability!`;
+            const encodedText = encodeURIComponent(text);
+            const whatsappURL = `https://wa.me/254799008282?text=${encodedText}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // E. Basket Abandon Recovery Captures
+        async function handleCartAbandonLead(event) {
+            event.preventDefault();
+            const phone = document.getElementById('cart-abandon-phone').value;
+            const itemsList = shoppingCart.map(i => `${i.name} (Qty ${i.qty})`).join(', ');
+
+            const leadObj = {
+                name: "Cart Rescue Prospect",
+                phone: phone,
+                location: "Shopping Cart Basket",
+                category: "Cart Abandon Lead",
+                details: `Pending items left behind in basket: ${itemsList}`
+            };
+
+            await window.saveLeadToDatabase(leadObj);
+            document.getElementById('cart-abandon-banner').classList.add('hidden');
+            triggerToast("Free Delivery Lock Secured! We'll call to help finalize your order.", "success");
+        }
+
+        // F. Mouse & Idle Event triggers for Exit-intent
+        document.addEventListener("mouseleave", function (e) {
+            if (e.clientY < 0 && !isLeadModalShown) {
+                isLeadModalShown = true;
+                toggleExitModal(true);
+            }
+        });
+
+        // Idle time tracker for mobile (45s idle opens the lead modal)
+        let idleTimeTracker;
+        function resetIdleTimer() {
+            clearTimeout(idleTimeTracker);
+            if (!isLeadModalShown) {
+                idleTimeTracker = setTimeout(function () {
+                    isLeadModalShown = true;
+                    toggleExitModal(true);
+                }, 45000);
+            }
+        }
+        window.onload = function() {
+            runFeedCalculation();
+            resetIdleTimer();
+            
+            document.addEventListener("mousemove", resetIdleTimer);
+            document.addEventListener("keypress", resetIdleTimer);
+            document.addEventListener("touchstart", resetIdleTimer);
+        };
+    </script>
+</body>
+</html>
